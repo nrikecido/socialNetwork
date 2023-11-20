@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 
 const Modify = (props) => {
 
+    console.log(props.button)
+
     const [state, setState] = useState({
         status: 'loading',
         events: []
@@ -26,7 +28,7 @@ const Modify = (props) => {
                             <button className="btn btn-primary" onClick={()=> {props.updateMain('createEvent')}}>Crear nuevo evento</button>
                         </div>
                         <div>
-                            <button className="btn btn-primary" onClick={()=> {props.updateMain('main')}}>Cancelar</button>
+                            {props.button === false &&<button className="btn btn-primary" onClick={()=> {props.updateMain('main')}}>Cancelar</button>}
                         </div>
                     </div>
                 </div>

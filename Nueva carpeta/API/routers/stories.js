@@ -5,40 +5,48 @@ const DB = require('../config/db');
 const authtoken = require('../config/authtoken');
 
 
-// Ver todas las historias de amigos
 router.get('/', [authtoken], async (req, resp) => {
-	try {
-	  const myID = req.user.ID;
+    try {
+        const myID = req.user.ID;
 
-	  const result = await DB
-		.select(['userstories.ID',
-			'userstories.userID', 
-			'userstories.ID', 
-			'userstories.content', 
-			'userstories.created', 
-			'users.nameSurname',
-		])
-		.from('userstories')
-		.leftJoin('users', function () {
-			this.on('users.ID', '=', 'userstories.userID')
-		})
-		.join('friends', function () {
-			this.on('userstories.userID', '=', 'friends.sendFriend')
-				.orOn('userstories.userID', '=', 'friends.acceptFriend');
-			})
-		.where('friends.accepted', true)
-		.andWhere(function () {
-			this.where('friends.acceptFriend', myID)
-			.orWhere('friends.sendFriend', myID);
-		})
-		.groupBy('userstories.ID');
-		
-	  resp.json({ status: true, data: result });
-	} catch (error) {
-	  console.error(error);
-	  resp.status(500).json({ status: false, message: 'Error en el servidor.' });
-	}
+        const result = await DB
+            .select([
+                'userstories.ID',
+                'userstories.userID',
+                'userstories.content',
+                'userstories.created',
+                'users.nameSurname as nameSurname',
+                'storycomments.ID as comentID',
+                'storycomments.content as comment',
+                'storycomments.userID as commentUserID', 
+                'usersComment.nameSurname as commentName'
+            ])
+            .from('userstories')
+            .leftJoin('users', function () {
+                this.on('users.ID', '=', 'userstories.userID');
+            })
+            .join('friends', function () {
+                this.on('userstories.userID', '=', 'friends.sendFriend')
+                    .orOn('userstories.userID', '=', 'friends.acceptFriend');
+            })
+            .leftJoin('storycomments', function () {
+                this.on('storycomments.userID', '=', 'users.ID');
+            })
+            .leftJoin('users as usersComment', 'usersComment.ID', '=', 'storycomments.userID') // Alias para el usuario que dejó el comentario
+            .where('friends.accepted', true)
+            .andWhere(function () {
+                this.where('friends.acceptFriend', myID)
+                    .orWhere('friends.sendFriend', myID);
+            })
+            .groupBy('userstories.ID');
+
+        resp.json({ status: true, data: result });
+    } catch (error) {
+        console.error(error);
+        resp.status(500).json({ status: false, message: 'Error en el servidor.' });
+    }
 });
+
 
 
 // Ver historias de un amigo en concreto (hay que repasar este)
@@ -48,18 +56,21 @@ router.get('/friends/:id', [authtoken], async (req, resp) => {
 	const friendID = req.params.id;
 
     const result = await DB
-		.select(['userstories.ID',
+		.select(['userstories.ID as storyID',
 			'userstories.userID', 
 			'userstories.content', 
-			'userstories.created'])
+			'userstories.created',
+			'storycomments.ID as comentID',
+			'storycomments.content as comentario'])
 		.from('userstories')
 		.join('friends', function(){
 			this.on('userstories.userID', '=', 'friends.acceptFriend')
 			this.orOn('userstories.userID', '=', 'friends.sendFriend')
 		})
-		.where('userID', friendID)
+		.join('storycomments')
+		.where('userstories.userID', friendID)
 		.andWhere('friends.accepted', 1)
-		.andWhereNot('userID', myID)
+		.andWhereNot('userstories.userID', myID)
 		
 	if(result.length > 0) {
 		resp.json({status: true, data: result});

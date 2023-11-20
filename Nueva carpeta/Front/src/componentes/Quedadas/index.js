@@ -9,22 +9,23 @@ import ModifyEvent from "./modifyBar/modifyEvent";
 const Content = () => {
 
     const [state, setState] = useState({
-        module: <Main />
+        module: <Main />,
+        button: true
     });
     
     const updateMain = (module) => {
         
-        if (module === 'createEvent') {setState({ ...state, module: <CreateEvent /> });}
+        if (module === 'createEvent') {setState({ ...state, module: <CreateEvent />, button: false });}
 
-        if (module === 'seeEvent') {setState({ ...state, module: <SeeEvent /> });}
+        if (module === 'seeEvent') {setState({ ...state, module: <SeeEvent />, button: false });}
 
-        if (module === 'main') {setState({ ...state, module: <Main /> });}
+        if (module === 'main') {setState({ ...state, module: <Main />, button: true });}
     }
-    console.log(state)
+    console.log('sss', state)
 
     return <>
         <div className="row">
-            <Modify updateMain={updateMain} ></Modify>
+            <Modify updateMain={updateMain} button={state.button}></Modify>
             {state.module}
             <SideInfo updateMain={updateMain} ></SideInfo>  
         </div>

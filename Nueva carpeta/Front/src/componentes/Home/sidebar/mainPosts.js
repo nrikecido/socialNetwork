@@ -11,26 +11,37 @@ const { created } = require('../../../config/utils');
 
 const Main = () => {
 
-	const [context, setContext] = useContext(ContextGlobal);
-	
-	const [state, setState] = useState({
-		status: 'loading',
-		posts: []
-	});
+    const [context, setContext] = useContext(ContextGlobal);
+    
+    const [state, setState] = useState({
+        status: 'loading',
+        posts: []
+    });
 
-	useEffect(()=>{
-		API.get('/stories/').then(result => {
-			setState({...state, status:"loaded", posts: result.data});
-		})
-	}, []);
+    useEffect(() => {
+        API.get('/stories/').then(result => {
+            setState({ ...state, status: "loaded", posts: result.data });
+        });
+    }, []);
 
 	const ordenaPosts = [...state.posts].sort((a, b) => {
-		// Compara las fechas de creación en orden descendente
 		return new Date(b.created) - new Date(a.created);
 	});
 
 	const updatePost = (e) =>{
 		setState({...state, content:e.target.value})
+	}
+
+	const [comment, setComment] = useState({
+		comment: false
+	})
+
+	const showComment = () =>{
+		setComment({...comment, comment: true})
+	}
+
+	const noComment = () =>{
+		setComment({...comment, comment: false})
 	}
 
 	const loadPosts = () => {
@@ -110,6 +121,9 @@ const Main = () => {
 							<div className="card-footer">
 								{context.user.ID == post.userID &&<FooterSelf id={('/stories/'+post.ID)} />}
 								{context.user.ID !== post.userID &&<Footer />}
+								{comment.comment === false &&<button className='btn btn-primary' onClick={()=> showComment()}>Ver comentarios</button>}
+								{comment.comment &&<button className='btn btn-primary' onClick={()=> noComment()}>Ocultar</button>}
+								{comment.comment && <div className='p-2'><p>{post.commentName}</p><p>{post.comment}</p></div>}
 							</div>
 						</div>
 					</div>

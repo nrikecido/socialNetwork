@@ -8,7 +8,7 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons'
 
 const Footer = () => {
     return <div className="container p-2">
-        <button className='btn' title='¡Comenta!'><FontAwesomeIcon icon={faComment} className='p-2'/></button>
+        <button className='btn' title='Comenta!'><FontAwesomeIcon icon={faComment} className='p-2'/></button>
         <button className='btn' title='¡Comparte!'><FontAwesomeIcon icon={faRetweet} className='p-2'/></button>
         <button className='btn' title='¡Like!'><FontAwesomeIcon icon={faHeart} className='p-2'/></button>
     </div>

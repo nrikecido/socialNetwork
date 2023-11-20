@@ -43,7 +43,6 @@ const Main = (props) => {
                             <p className='border-bottom border-primary'>Descripción: {events.description}</p>
                             {context.user.ID === events.userID && <FooterSelf id={'/events/'+events.ID} />}
                             {context.user.ID !== events.userID && <GoFooter id={'/eventgo/'+events.ID}/> }
-                            {}
                         </div>
                     </div>
                 </div>
