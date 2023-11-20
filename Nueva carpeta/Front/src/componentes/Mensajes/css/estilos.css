@@ -1,0 +1,15 @@
+.contacts img {
+    width: 20%;
+}
+
+
+
+.my-message {
+    text-align: right;
+    /* Otros estilos para tus mensajes */
+}
+
+.other-message {
+    text-align: left;
+    /* Otros estilos para los mensajes de otros */
+}

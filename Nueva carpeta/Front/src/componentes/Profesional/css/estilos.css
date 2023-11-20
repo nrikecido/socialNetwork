@@ -1,0 +1,15 @@
+.profile-image {
+    width: 80%;
+}
+
+.post-image{
+    width: 40%;
+}
+
+.friend-image{
+    width: 20%;
+}
+
+li {
+    list-style: none;
+}

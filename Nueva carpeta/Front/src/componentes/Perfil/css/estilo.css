@@ -1,0 +1,20 @@
+.profile img {
+    width: 100%;
+}
+
+.posts .profile-image {
+    width: 10%;
+}
+
+.posts .post-image{
+    width: 50%;
+}
+
+.suggested img{
+    width: 30%;
+}
+
+.posts .rounded-input{
+    border-radius: 20px;
+    border-color: black;
+}
