@@ -3,26 +3,26 @@ import Modify from "./sidebar/modify";
 import SideInfo from "./sidebar/sideInfo"
 import Main from "./sidebar/main";
 import CreateEvent from "./modifyBar/createEvent";
-import SeeEvent from "./modifyBar/seeEvent";
 import ModifyEvent from "./modifyBar/modifyEvent";
 
-const Content = () => {
+const Content = (props) => {
 
-    const [state, setState] = useState({
-        module: <Main />,
-        button: true
-    });
-    
     const updateMain = (module) => {
         
-        if (module === 'createEvent') {setState({ ...state, module: <CreateEvent />, button: false });}
+        if (module === 'createEvent') {setState({ ...state, module: <CreateEvent updateMain={updateMain}/>, button: false });}
 
-        if (module === 'seeEvent') {setState({ ...state, module: <SeeEvent />, button: false });}
+        if (module === 'main') {setState({ ...state, module: <Main updateMain={updateMain}/>, button: true });}
 
-        if (module === 'main') {setState({ ...state, module: <Main />, button: true });}
+        if (module === 'modify') (setState({...state, module: <ModifyEvent />, button: true}))
     }
-    console.log('sss', state)
 
+    const [state, setState] = useState({
+        module: <Main updateMain={updateMain}/>,
+        button: true
+    });
+
+    console.log('desde index', state)
+    
     return <>
         <div className="row">
             <Modify updateMain={updateMain} button={state.button}></Modify>

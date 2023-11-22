@@ -45,7 +45,7 @@ const api = {
 		return response.json(); // Nos devuelve una promesa
 	},
 
-	put: async function(path, obj = {},  method = "POST") {
+	put: async function(path, obj = {},  method = "PUT") {
 		const url = this.endpoint + path;
 	  
 		const response = await fetch(url, {
@@ -58,7 +58,7 @@ const api = {
 		  body: JSON.stringify(obj)
 		});
 	  
-		return response.json(); // Devuelve una promesa
+		return response.json();
 	},
 
 	delete: async function (path, obj = {}) {

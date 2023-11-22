@@ -1,9 +1,9 @@
 import API from "../../../config/api";
 import { useEffect, useState } from "react";
 
+
 const Modify = (props) => {
 
-    console.log(props.button)
 
     const [state, setState] = useState({
         status: 'loading',
@@ -16,14 +16,11 @@ const Modify = (props) => {
         });
     }, [])
 
-    console.log(state.events)
-
     return <>
         <div className="col-xl-3">
             <div className="card rounded">
                 <div className="card-body">
                     <div className="mt-3 card-header">
-                        <h2>Quedadas</h2>
                         <div>
                             <button className="btn btn-primary" onClick={()=> {props.updateMain('createEvent')}}>Crear nuevo evento</button>
                         </div>

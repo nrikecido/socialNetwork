@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, state } from 'react';
 import API from '../../../config/api';
-import { useNavigate } from 'react-router-dom';
 
-const CreateEvent = () => {
+
+const CreateEvent = (props) => {
   
+  const [message, setMessage] = useState('')
+
   const [state, setState] = useState({
     title: '',
     description: '',
@@ -15,7 +17,13 @@ const CreateEvent = () => {
     valoration: '',
   });
 
-  const navigate = useNavigate();
+  const mensaje = () => {
+    setMessage(<p className='bg-success p-2 rounded'>Evento publicado correctamente</p>);
+    setTimeout(() => {
+      setMessage(null);
+      props.updateMain('main');
+    }, 3000);
+  };
 
   const publishEvent = () => {
     const eventData = {
@@ -29,9 +37,9 @@ const CreateEvent = () => {
       valoration: state.valoration,
     };
 
-    API.post('/', eventData)
+    API.post('/events/', eventData)
       .then(() => {
-        navigate('/quedadas/');
+        mensaje()
       })
       .catch((error) => {
         console.error('Error al publicar el evento:', error);
@@ -131,6 +139,7 @@ const CreateEvent = () => {
             <button className="btn btn-primary" onClick={publishEvent}>
               Publicar
             </button>
+            <button onClick={()=> mensaje()}>ldldld</button>{message}
           </div>
         </div>
       </div>

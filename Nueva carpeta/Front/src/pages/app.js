@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { ContextGlobal } from '../config/contextGlobal';
 import API from '../config/api';
 import { useNavigate } from 'react-router-dom';
+import './app.css';
 
 
 const Contenido = (props) => {
@@ -31,7 +32,7 @@ const Contenido = (props) => {
 
     return <>
 			<Header></Header>
-			<div className="container">{props.children}</div>
+			<div className="container app">{props.children}</div>
 		</>;
 }
 

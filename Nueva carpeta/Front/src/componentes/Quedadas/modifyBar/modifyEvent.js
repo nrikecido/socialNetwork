@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import API from '../../../config/api';
-import { redirect, useNavigate, useParams } from 'react-router-dom';
-import moment from 'moment';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const ModifyEvent = () => {
-  
-  const { id } = useParams();
+
+  const {id} = useParams();
 
   const [state, setState] = useState({
     status: 'loading',
@@ -13,12 +12,12 @@ const ModifyEvent = () => {
   });
 
   useEffect(() => {
-    API.get('/events/'+ id)
+    API.get(`/events/${id}`)
       .then(result => {
-        setState({ status: 'loaded', event: result.data[0] });
+        setState({ status: 'loaded', event: result.data });
       })
   }, [id]);
-
+  
   const update = (field, value) => {
 
 		const newState = {...state};
@@ -31,38 +30,39 @@ const ModifyEvent = () => {
 
   const [message, setMessage] = useState('')
 
-    const clean = () =>{
-        setTimeout(()=>{
-            setMessage('')
-            redirect('/app/quedadas')
-        }, 3000)
-    }
+  const clean = () =>{
+    setTimeout(()=>{
+      setMessage('')
+      redirect('/app/quedadas')
+    }, 3000)
+  }
 
   const updateData = () => {
 
-		const obj = {
-			title: state.event.title,
-			description: state.event.description,
+    const obj = {
+      title: state.event.title,
+      description: state.event.description,
       date: state.event.date.slice(0, 10),
-      duration: state.event.needed,
+      duration: state.event.duration,
+      needed: state.event.needed,
       capacity: state.event.capacity,
-      email: state.event.title,
+      email: state.event.email,
       GPS: state.event.GPS
-		}
+    }
 
-		API.put('/events/'+ id, obj).then(data =>{
+    API.put(`/events/${id}`, obj).then(data =>{
 
-			if( data.status === true ){
-				setMessage(<p className='bg-primary-subtle p-2 rounded'>Cambios guardados correctamente</p>);
+      if( data.status === true ){
+        setMessage(<p className='bg-primary-subtle p-2 rounded'>Cambios guardados correctamente</p>);
         clean();
-			} else {
+      } else {
         console.log('no se ha modificado')
       }
-		})
+    })
 	}
 
   return (
-    <div className="col-xl-6" key={state.ModifyEvent}>
+    <div className="col-xl-12" key={state.ModifyEvent}>
       <h1 className="card body p-2 text-center m-1">Modificar evento existente</h1>
       <div className="card rounded m-1 mt-3">
         <h4 className="card-header">Información general</h4>

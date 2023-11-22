@@ -43,7 +43,6 @@ router.post('/:id', async (req, resp) => {
 			userID:  req.body.userID,
             valoration: req.body.valoration
 		})
-		;
 	} catch (error) {
 		return resp.json({status: false, error: "Algo falló"});
 	}

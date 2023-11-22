@@ -18,6 +18,7 @@ const Main = (props) => {
 		status: 'loading',
 		events: []
 	});
+    console.log(props.updateMain)
 
 	useEffect(()=>{
 		API.get('/events/list').then(result => {
@@ -25,9 +26,22 @@ const Main = (props) => {
 		})
 	}, []);
 
+    const [message, setMessage] = useState(null);
+    
+    const eraseEvent =() => {
+        setMessage(<p className='bg-danger rounded p-3'>Evento eliminado</p>)
+        setTimeout(() =>{
+            setMessage(null)
+            window.location.reload()
+        }, 3000)
+    }
+
+    const modify = () =>{
+    }
+
     return <>
         <div className="col-xl-6">
-            <h1 className='card body p-2 text-center'>Quedadas de tus amigos</h1>
+            <h1 className='card body p-2 text-center'>Quedadas</h1>
             {
                 state.events.map(events => {
                     return <div className="card rounded mt-3" key={events.ID}>
@@ -41,13 +55,13 @@ const Main = (props) => {
                             <p className='border-bottom border-primary'>Programada para {moment(events.date).format("DD/MM/YYYY")}</p>
                             <p className='border-bottom border-primary'>Lugar: {events.GPS}</p>
                             <p className='border-bottom border-primary'>Descripción: {events.description}</p>
-                            {context.user.ID === events.userID && <FooterSelf id={'/events/'+events.ID} />}
+                            {context.user.ID === events.userID && <FooterSelf id={'/events/'+events.ID} erase={eraseEvent} modifys ={modify} dato={'event'} update={props.updateMain}/>}
                             {context.user.ID !== events.userID && <GoFooter id={'/eventgo/'+events.ID}/> }
                         </div>
                     </div>
                 </div>
                 })
-            }
+            }{message}
         </div>
     </>
 }

@@ -51,10 +51,10 @@ const Main = () => {
         }) 
     };
 
-	const [successPost, setSuccessMessage] = useState('');
+	const [successPost, setSuccessMessage] = useState(null);
 
 	const clean = () => {
-		setSuccessMessage('');
+		setSuccessMessage(null);
 	};
 
 	const publishPost = () => {
@@ -77,6 +77,18 @@ const Main = () => {
 			}, 3000);
         }
     };
+
+	const [message, setMessage] = useState(null);
+    
+    const eraseEvent =() => {
+        setMessage(<p className='bg-danger rounded p-3'>Publicación eliminada</p>)
+        setTimeout(() =>{
+            setMessage(null)
+            window.location.reload()
+        }, 3000)
+    }
+
+	const modify = ()=>{}
 
     return <>
         <div className="col-xl-6">
@@ -119,7 +131,7 @@ const Main = () => {
 								<p className="mb-3 tx-14">{post.content}</p>
 							</div>
 							<div className="card-footer">
-								{context.user.ID == post.userID &&<FooterSelf id={('/stories/'+post.ID)} />}
+								{context.user.ID == post.userID &&<FooterSelf id={('/stories/'+post.ID)} erase={eraseEvent} modifys ={modify} dato={'post'}/>}
 								{context.user.ID !== post.userID &&<Footer />}
 								{comment.comment === false &&<button className='btn btn-primary' onClick={()=> showComment()}>Ver comentarios</button>}
 								{comment.comment &&<button className='btn btn-primary' onClick={()=> noComment()}>Ocultar</button>}
@@ -128,7 +140,7 @@ const Main = () => {
 						</div>
 					</div>
 					})
-				}
+				}{message}
             </div>
         </div>
         

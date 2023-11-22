@@ -11,7 +11,7 @@ const SeeEvent = (props) => {
   });
 
   useEffect(() => {
-    API.get('/events').then(result => {
+    API.get('/events/').then(result => {
       setState({ status: "loaded", events: result.data });
     });
   }, []);
