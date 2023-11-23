@@ -28,20 +28,20 @@ root.render(
   <React.StrictMode>
 	<BrowserRouter>
 		<Routes>
-			<Route path="/" element={<APP><Home></Home></APP>}  />
-			<Route path='/app/stories/modify/stories/:id' element={<APP><ModifyStory /></APP>} />
 			<Route path='/musin/' element={<Login></Login>} />
-			<Route path="/app/quedadas/" element={<APP><Quedadas /></APP>}  />
-			<Route path="/app/quedadas/modify/events/:id" element={<APP><ModifyEvent /></APP>}  />
-			<Route path="/app/profesional/" element={<APP><Profesional /></APP>}  />
-			<Route path="/app/social/" element={<APP><Social/></APP>}  />
-			<Route path="/app/profile/:id" element= {<APP><Profile /></APP>} />
-			<Route path="/app/mensajes/:user?" element={<APP><Mensajes/></APP>}  />
-			<Route path="/app/perfil/" element={<APP><Perfil/></APP>}  />
-			<Route path="/login/" element={<Login/>}  />
 			<Route path="/login/forgot" element={<Forgot/>}  />
 			<Route path="/login/register" element={<Register/>}  />
 			<Route path="/login/reset" element={<Reset/>}  />
+			<Route path="/app/home/" element={<APP><Home></Home></APP>}  />
+			<Route path='/app/home/modify/stories/:id' element={<APP><ModifyStory /></APP>} />
+			<Route path="/app/social/" element={<APP><Social/></APP>}  />
+			<Route path="/app/quedadas/" element={<APP><Quedadas /></APP>}  />
+			<Route path="/app/quedadas/modify/events/:id" element={<APP><ModifyEvent /></APP>}  />
+			<Route path="/app/profesional/" element={<APP><Profesional /></APP>}  />
+			<Route path="/app/mensajes/:user?" element={<APP><Mensajes/></APP>}  />
+			<Route path="/app/perfil/" element={<APP><Perfil/></APP>}  />
+			<Route path="/app/profile/:id" element= {<APP><Profile /></APP>} />
+			
 		</Routes>
 	</BrowserRouter>
   </React.StrictMode>

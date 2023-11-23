@@ -5,7 +5,7 @@ const DB = require('../config/db');
 const authtoken = require('../config/authtoken');
 
 
-router.get('/', [authtoken], async (req, resp) => {
+router.get('/list', [authtoken], async (req, resp) => {
     try {
         const myID = req.user.ID;
 
@@ -67,10 +67,11 @@ router.get('/friends/:id', [authtoken], async (req, resp) => {
 			this.on('userstories.userID', '=', 'friends.acceptFriend')
 			this.orOn('userstories.userID', '=', 'friends.sendFriend')
 		})
-		.join('storycomments')
+		.leftJoin('storycomments', 'userstories.ID', '=', 'storycomments.userID')
 		.where('userstories.userID', friendID)
 		.andWhere('friends.accepted', 1)
 		.andWhereNot('userstories.userID', myID)
+		console.log(result)
 		
 	if(result.length > 0) {
 		resp.json({status: true, data: result});

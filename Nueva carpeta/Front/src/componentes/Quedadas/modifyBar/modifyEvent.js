@@ -28,6 +28,10 @@ const ModifyEvent = () => {
 
   const redirect = useNavigate();
 
+  const cancelar = () => {
+    redirect('/app/quedadas/')
+  }
+
   const [message, setMessage] = useState('')
 
   const clean = () =>{
@@ -144,7 +148,7 @@ const ModifyEvent = () => {
               Publicar
             </button>
             {message}
-            <button className="btn btn-primary">
+            <button className="btn btn-primary" onClick={cancelar}>
               Cancelar
             </button>
           </div>

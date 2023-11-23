@@ -6,7 +6,9 @@ const authtoken = require('../config/authtoken');
 
 
 // Obtener comentarios de una historia en concreto
-router.get('/stories/list', async (req, resp) => {
+router.get('/stories/:id', async (req, resp) => {
+
+	const storyID = req.params.id;
 
     const result = await DB.select(['users.nameSurname as nameSurname',
 		'storycomments.storyID',
@@ -15,7 +17,8 @@ router.get('/stories/list', async (req, resp) => {
 	.from('storycomments')
 	.leftJoin('users',
 		'storycomments.userID',
-		'users.ID');
+		'users.ID')
+	.where('storycomments.storyID', storyID);
 
 	if( result.length > 1 ){
 		return resp.json({status: true, data: result});

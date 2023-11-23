@@ -11,10 +11,10 @@ const hash = require('../config/password');
 router.get('/list', [authtoken], async (req, resp) => {
 
 	const result = await DB.select(['nameSurname', 'description'])
-	.from('users');
+	.from('users')
 	
-	if( result.length === 1 ){
-		return resp.json({status: true, data: result[0]});
+	if( result.length > 0 ){
+		return resp.json({status: true, data: result});
 	}else{
 		return resp.json({status: false, error: "Ups, algo falló"});
 	}
@@ -159,7 +159,6 @@ router.post('/login', async (req, resp) => {
 	  .where('password', req.body.password)
       .first();
 
-
 	if (userData !== undefined ) {
 		const newToken = hash(userData.token);
 		await DB('users')
@@ -173,13 +172,23 @@ router.post('/login', async (req, resp) => {
 });
 
 // Pedir para resetear la contraseña
-router.post('/reset', [authtoken], async (req, resp) => {
+router.post('/reset', async (req, resp) => {
 
-}
+	const result = await DB.select(['nameSurname', 'email'])
+		.from('users')
+		.where('nameSurname', req.body.nameSurname)
+		.andWhere('email', req.body.email)
+
+		if (result.length > 0){
+			return resp.json({status: true, data: result[0]})
+		} else {
+			return resp.json({status:false, data: 'El usuario no existe'})
+		}
+	}
 );
 
 // Introducir nueva contraseña
-router.put('/users/reset/:token', (req, resp) => {
+router.put('/users/reset/:pass', (req, resp) => {
 	
 }
 );

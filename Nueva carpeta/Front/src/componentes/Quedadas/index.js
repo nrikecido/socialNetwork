@@ -5,7 +5,7 @@ import Main from "./sidebar/main";
 import CreateEvent from "./modifyBar/createEvent";
 import ModifyEvent from "./modifyBar/modifyEvent";
 
-const Content = (props) => {
+const Content = () => {
 
     const updateMain = (module) => {
         
@@ -20,8 +20,6 @@ const Content = (props) => {
         module: <Main updateMain={updateMain}/>,
         button: true
     });
-
-    console.log('desde index', state)
     
     return <>
         <div className="row">

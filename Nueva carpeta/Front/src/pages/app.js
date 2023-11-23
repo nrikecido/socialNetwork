@@ -19,7 +19,7 @@ const Contenido = (props) => {
 			if(d.status === true){
 				setContext({...context, status: "loaded", user: d.data})
 			}else{
-				navigate('/login');
+				navigate('/musin');
 				// setContext({...context, status: "loaded"});		
 			}
 		})

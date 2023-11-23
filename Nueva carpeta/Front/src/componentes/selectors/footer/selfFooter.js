@@ -17,7 +17,7 @@ const FooterSelf = ({id, erase, dato}) => {
     const modifyPost = () => {
         if (dato === 'post'){
             console.log('modificando '+id)
-            navigate('/app/stories/modify'+id)
+            navigate('/app/home/modify'+id)
         } else if (dato === 'event'){
             navigate('/app/quedadas/modify'+id)
             console.log('estoy dando a modificar evento')

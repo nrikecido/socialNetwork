@@ -1,9 +1,8 @@
 import './header.css';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import API from '../../config/api';
 import { useNavigate } from 'react-router-dom';
-import {ContextGlobal} from '../.././config/contextGlobal';
 
 const Header = () => {
 
@@ -17,7 +16,7 @@ const Header = () => {
 
     const logout = () =>{
         API.remove_token('token')
-        redirect('/login')
+        redirect('/musin')
     }
 
     return <>
@@ -26,7 +25,7 @@ const Header = () => {
         </div>
         <div className="container links">
             <div className="m-3 text-center">
-                <button className="btn btn-primary m-1"><Link className="text-white" to="/">Principal</Link></button>
+                <button className="btn btn-primary m-1"><Link className="text-white" to="/app/home">Principal</Link></button>
                 <button className="btn btn-primary m-1"><Link className="text-white" to="/app/social">Social</Link></button>
                 <button className="btn btn-primary m-1"><Link className="text-white" to="/app/quedadas">Quedadas</Link></button>
                 <button className="btn btn-primary m-1"><Link className="text-white" to="/app/profesional">Profesional</Link></button>

@@ -35,7 +35,7 @@ const Modify = (props) => {
                     <div className="mt-3 ">
                         <h2 className="card-header">Quedadas a las que acudirás</h2>
                         {state.events.map(events => {
-                            return <div className="p-2">
+                            return <div key={events.ID} className="p-2">
                                 <div className="border-bottom">
                                     <p>Título: {events.title}</p>
                                     <p>Programada para: {events.date.slice(0,10)}</p>

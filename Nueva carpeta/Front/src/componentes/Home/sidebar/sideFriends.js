@@ -20,14 +20,14 @@ const SideFriends = (props) => {
 	}, []);
 
     return <>
-        <div className="col-xl-3 suggested">
+        <div className="col-xl-3 suggested" key={state.friends.ID}>
             <div className="row">
                 <div className="col-md-12">
                     <div className="card rounded">
                         <div className="card-body">
                             <h4 className="card-title border-bottom">Amigos</h4>
                             {state.friends.map(friends => {
-                                return <div className="d-flex justify-content-between mb-2 pb-2 border-bottom">
+                                return <div key={friends.ID} className="d-flex justify-content-between mb-2 pb-2 border-bottom">
                                 <div className="d-flex align-items-center" key={friends.userID}>
                                     <img className="img-xs rounded-circle" src={Avatar} alt="profile" />
                                     <div className="ml-2">

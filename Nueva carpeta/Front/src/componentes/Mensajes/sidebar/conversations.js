@@ -34,7 +34,7 @@ const Conversations = (props) => {
                 {
                     state.messages.map(messages =>{
                         return (
-                            <p className="border rounded">
+                            <p key={messages.ID} className="border rounded">
                               {messages.OtherPartyName} dice: {messages.content}
                               <span className="tx-11 text-muted"> hace {created(messages.created)}</span>
                               <button className='btn' onClick={()=> props.pickConver(messages.OtherPartyID)}> Enviar mensaje</button>

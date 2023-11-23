@@ -17,25 +17,28 @@ const ModifyStory = () => {
         setState({ status: 'loaded', story: result.data });
       })
     }, [id]);
-    console.log(state.story)
   
     const update = (field, value) => {
 
-        const newState = {...state};
-        newState.story[field] = value;
+      const newState = {...state};
+      newState.story[field] = value;
 
-        setState(newState);
-        }
+      setState(newState);
+    }
 
     const redirect = useNavigate();
+
+    const cancelar = () =>{
+      redirect('/app/home')
+    }
 
     const [message, setMessage] = useState('')
 
     const clean = () =>{
-        setTimeout(()=>{
-        setMessage('')
-        redirect('/')
-        }, 3000)
+      setTimeout(()=>{
+      setMessage('')
+      redirect('/')
+      }, 3000)
     }
 
     const updateData = () => {
@@ -46,13 +49,13 @@ const ModifyStory = () => {
 
     API.put(`/stories/${id}`, obj).then(data =>{
 
-        if( data.status === true ){
-            setMessage(<p className='bg-primary-subtle p-2 rounded'>Cambios guardados correctamente</p>);
-            clean();
-        } else {
-            setMessage(<p className='bg-primary-subtle p-2 rounded'>Ha courrido un error. Inténtalo de nuevo</p>);
-        }
-        })
+      if( data.status === true ){
+          setMessage(<p className='bg-primary-subtle p-2 rounded'>Cambios guardados correctamente</p>);
+          clean();
+      } else {
+          setMessage(<p className='bg-primary-subtle p-2 rounded'>Ha courrido un error. Inténtalo de nuevo</p>);
+      }
+    })
 	}
 
   return (
@@ -76,7 +79,7 @@ const ModifyStory = () => {
               Publicar
             </button>
             {message}
-            <button className="btn btn-primary">
+            <button className="btn btn-primary" onClick={cancelar}>
               Cancelar
             </button>
           </div>

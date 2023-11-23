@@ -34,10 +34,9 @@ router.get('/list', [authtoken], async (req, resp) => {
 });
 
 
-
-
 // Obtener conversación en concreto
 router.get('/:id', [authtoken], async (req, resp) => {
+
     const myID = req.user.ID;
     const friendID = req.params.id;
     
@@ -110,7 +109,7 @@ router.put('/:id', [authtoken], async (req, resp) => {
 });
 
 
-// Eliminar mensajes
+// Eliminar conversación
 router.delete('/:id', [authtoken], async (req, resp) => {
 
     const myID = req.user.ID;

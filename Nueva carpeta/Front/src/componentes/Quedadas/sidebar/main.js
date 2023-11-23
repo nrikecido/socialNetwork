@@ -18,7 +18,6 @@ const Main = (props) => {
 		status: 'loading',
 		events: []
 	});
-    console.log(props.updateMain)
 
 	useEffect(()=>{
 		API.get('/events/list').then(result => {

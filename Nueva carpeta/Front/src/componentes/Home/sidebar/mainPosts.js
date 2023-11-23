@@ -3,9 +3,8 @@ import '../css/estilo.css';
 import Footer from '../../selectors/footer/otherFooter';
 import FooterSelf from '../../selectors/footer/selfFooter';
 import API from '../../../config/api';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
 import { ContextGlobal } from '../../../config/contextGlobal';
 const { created } = require('../../../config/utils');
 
@@ -19,7 +18,7 @@ const Main = () => {
     });
 
     useEffect(() => {
-        API.get('/stories/').then(result => {
+        API.get('/stories/list').then(result => {
             setState({ ...state, status: "loaded", posts: result.data });
         });
     }, []);
@@ -45,7 +44,7 @@ const Main = () => {
 	}
 
 	const loadPosts = () => {
-        API.get('/stories/')
+        API.get('/stories/list')
             .then((result) => {
             	setState({ status: 'loaded', posts: result.data });
         }) 
@@ -116,7 +115,7 @@ const Main = () => {
 
 				{
 					ordenaPosts.map(post => {
-						return <div className="col-md-12 posts mt-3">
+						return <div key={post.ID} className="col-md-12 posts mt-3">
 						<div className="card rounded">
 							<div className="card-header">
 								<div className="d-flex align-items-center">

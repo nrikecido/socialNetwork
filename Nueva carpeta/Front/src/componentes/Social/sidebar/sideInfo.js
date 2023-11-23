@@ -6,8 +6,6 @@ import { Link } from 'react-router-dom';
 
 const SideInfo = (props) => {
 
-    console.log('sdsdsd', props.button)
-
     const [friendsState, setFriendsState] = useState({
         status: 'loading',
         friends: []
@@ -23,18 +21,13 @@ const SideInfo = (props) => {
         API.get('/friends/list')
             .then(result => {
                 setFriendsState({ status: 'loaded', friends: result.data });
-            })
-            .catch(error => {
-                setFriendsState({ status: 'error', friends: [], error: 'Error al cargar la lista de amigos' });
+            
         });
 
         API.get('/votes/list')
             .then(result => {
                 setVotesState({ status: 'loaded', votes: result.data });
             })
-            .catch(error => {
-                setVotesState({ status: 'error', votes: [], error: 'Error al cargar la lista de votos' });
-            });
         }, []);
     
 
@@ -46,7 +39,7 @@ const SideInfo = (props) => {
                         <h5 className="card-header">Tus amigos</h5>
                         <div className="p-2">
                             {friendsState.friends.map(friends => {
-                            return <div className="d-flex justify-content-between mb-2 pb-2 border-bottom">
+                            return <div key={friends.ID} className="d-flex justify-content-between mb-2 pb-2 border-bottom">
                                         <div className="d-flex align-items-center" key={friends.userID}>
                                             <img className="img-xs rounded-circle profile-image" src={Avatar} alt="profile" />
                                             <div className="ml-2">

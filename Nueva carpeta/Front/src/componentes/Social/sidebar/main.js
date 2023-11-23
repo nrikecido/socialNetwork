@@ -20,7 +20,7 @@ const Main = () => {
 
 	useEffect(()=>{
 
-		API.get('/stories').then(result => {
+		API.get('/stories/list').then(result => {
 			setState({...state, status:"loaded", posts: result.data});
 		})
 
@@ -35,7 +35,7 @@ const Main = () => {
             <div className="row card">
                 {
 					ordenaPosts.map(post => {
-						return <div className="col-md-12 posts mt-3">
+						return <div key={ordenaPosts.ID} className="col-md-12 posts mt-3">
 						<div className="card rounded">
 							<div className="card-header">
 								<div className="d-flex align-items-center">

@@ -30,9 +30,13 @@ router.get('/list', [authtoken], async (req, resp) => {
 			.orWhere('eventgo.userID', '=', req.user.ID)
 	})
 	.groupBy('evento.ID');
-		resp.json({ status: true, data: result });
+	
+	if (result.length > 0){
+		resp.json({status: true, data: result})
+	} else {
+		resp.json({status: false, data: 'Hubo un error'})
+	}
 });
-
 
 
 // Apuntarse a un evento

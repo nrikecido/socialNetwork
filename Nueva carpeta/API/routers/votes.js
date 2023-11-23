@@ -5,27 +5,36 @@ const DB = require('../config/db');
 const authtoken = require('../config/authtoken');
 
 router.get('/list', [authtoken], async (req, resp) => {
+
 	myID = req.user.ID;
+
 	const result = await DB
 		.select('evento.title as evento', 
 		'users.nameSurname as usuario', 
 		'votes.valoration')
-    .from('votes')
-    .innerJoin('evento', 'votes.eventID', 'evento.ID')
-    .innerJoin('users', 'votes.userID', 'users.ID')
-    .innerJoin('eventgo', 'eventgo.userID', '=', 'users.ID') // Unimos la tabla "eventgo" con la tabla "users"
-    .where('eventgo.userID', myID) // Filtramos por la columna "userID" de la tabla "eventgo"
-	.distinct();
+		.from('votes')
+		.innerJoin('evento', 'votes.eventID', 'evento.ID')
+		.innerJoin('users', 'votes.userID', 'users.ID')
+		.innerJoin('eventgo', 'eventgo.userID', '=', 'users.ID') 
+		.where('eventgo.userID', myID)
+		.distinct();
 
-  resp.json({status: true, data: result});
+	if( result.length > 0 ){
+		return resp.json({status: true, data: result});
+	}else{
+		return resp.json({status: false, error: "Ups, algo falló"});
+	}
 });
 
 // Obtener votos totales de un evento
-router.get('/:id', async (req, resp) => {
+router.get('/:id', [authtoken], async (req, resp) => {
 	const eventId = req.params.id;
+	const myID = req.user.ID;
+
 	const result = await DB.select(DB.raw('AVG(valoration) as media'))
 		.from('votes')
 		.where('eventID', eventId)
+		.andWhere('userID', myID)
   
 	if (result.length === 0) {
 		resp.json({ status: false, message: 'Evento no encontrado' });
@@ -36,20 +45,21 @@ router.get('/:id', async (req, resp) => {
 
 
 //Votar un evento
-router.post('/:id', async (req, resp) => {
+router.post('/:id', [authtoken], async (req, resp) => {
+
 	try {
 		const result = await DB('votes').insert({
-			eventID: req.body.eventID,
-			userID:  req.body.userID,
+			eventID: req.params.id,
+			userID:  req.user.ID,
             valoration: req.body.valoration
 		})
-	} catch (error) {
-		return resp.json({status: false, error: "Algo falló"});
-	}
-		return resp.json({status: true});
-});
-
-
-
+		console.log(result)
+		return resp.json({status: true, data: 'Evento votado correctamente'});
+		} catch (error) {
+		console.error('Error al votar el evento:', error);
+	
+		return resp.json({ status: false, error: 'Algo falló' });
+		}
+	});
 
 module.exports = router;

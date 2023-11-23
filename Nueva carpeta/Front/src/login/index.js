@@ -1,17 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import API from '../config/api';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-  
+
 
 const Login = () => {
+
+	const redirect = useNavigate();
+
+  	useEffect(() => {
+		const token = localStorage.getItem('token');
+		if (token === localStorage.token) {redirect('/app/home');}
+	}, []);
 
 	const [state, setState] = useState({
 		email: "",
 		password: ""
 	});
-
-	const redirect = useNavigate();
 
 	const saveData = (field, value) => {
 
@@ -38,11 +43,11 @@ const Login = () => {
 
 			if( data.status === true ){
 				API.save_token(data.data);
-				redirect('/');
+				redirect('/app/home');
 			}
 		})
 	}
-
+	
 	return  <>
 	<section className="h-100">
 		<div className="container h-100">
@@ -54,7 +59,7 @@ const Login = () => {
 					<div className="card shadow-lg">
 						<div className="card-body p-5">
 							<h1 className="fs-4 card-title fw-bold mb-4 text-center">LOGIN</h1>
-							<form method="POST" className="needs-validation">
+							<div className="needs-validation">
 								<div className="mb-3">
 									<label className="mb-2 text-muted">Correo electrónico</label>
 									<input 
@@ -71,7 +76,14 @@ const Login = () => {
 
 								<div className="mb-3">
 									<label className="text-muted">Password</label>
-									<input id="password" type="password" className="form-control" name="password" value={state.password} onChange={(event)=>{saveData("password", event.target.value)}}  required />
+									<input 
+									id="password" 
+									type="password" 
+									className="form-control" 
+									name="password" 
+									value={state.password} 
+									onChange={(event)=>{saveData("password", event.target.value)}}  required 
+									/>
 								    <div className="invalid-feedback">
 								    	Password is required
 							    	</div>
@@ -89,7 +101,7 @@ const Login = () => {
 										Login
 									</button>
 								</div>
-							</form>
+							</div>
 						</div>
 						<div className="card-footer py-3 border-0">
 							<div className="text-center">
@@ -105,7 +117,7 @@ const Login = () => {
 		</div>
 	</section>
 	</>
-};
+}
 
 export default Login;
 		
