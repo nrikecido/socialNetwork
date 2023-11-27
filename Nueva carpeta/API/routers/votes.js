@@ -13,9 +13,9 @@ router.get('/list', [authtoken], async (req, resp) => {
 		'users.nameSurname as usuario', 
 		'votes.valoration')
 		.from('votes')
-		.innerJoin('evento', 'votes.eventID', 'evento.ID')
-		.innerJoin('users', 'votes.userID', 'users.ID')
-		.innerJoin('eventgo', 'eventgo.userID', '=', 'users.ID') 
+		.innerJoin('evento', 'votes.eventID', '=', 'evento.ID')
+		.innerJoin('users', 'votes.userID', '=','users.ID')
+		.leftJoin('eventgo', 'eventgo.userID', '=', 'users.ID') 
 		.where('eventgo.userID', myID)
 		.distinct();
 
@@ -53,7 +53,6 @@ router.post('/:id', [authtoken], async (req, resp) => {
 			userID:  req.user.ID,
             valoration: req.body.valoration
 		})
-		console.log(result)
 		return resp.json({status: true, data: 'Evento votado correctamente'});
 		} catch (error) {
 		console.error('Error al votar el evento:', error);

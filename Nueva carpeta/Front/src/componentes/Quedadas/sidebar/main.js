@@ -19,6 +19,8 @@ const Main = (props) => {
 		events: []
 	});
 
+    console.log(state)
+
 	useEffect(()=>{
 		API.get('/events/list').then(result => {
 			setState({...state, status:"loaded", events: result.data});
@@ -34,7 +36,8 @@ const Main = (props) => {
             window.location.reload()
         }, 3000)
     }
-
+    console.log(state.events)
+    
     const modify = () =>{
     }
 

@@ -71,7 +71,6 @@ router.get('/friends/:id', [authtoken], async (req, resp) => {
 		.where('userstories.userID', friendID)
 		.andWhere('friends.accepted', 1)
 		.andWhereNot('userstories.userID', myID)
-		console.log(result)
 		
 	if(result.length > 0) {
 		resp.json({status: true, data: result});

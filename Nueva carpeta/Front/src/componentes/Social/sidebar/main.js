@@ -19,16 +19,33 @@ const Main = () => {
 	});
 
 	useEffect(()=>{
-
-		API.get('/stories/list').then(result => {
+		API.get('/stories/list')
+		.then(result => {
 			setState({...state, status:"loaded", posts: result.data});
 		})
-
 	}, []);
 
 	const ordenaPosts = [...state.posts].sort((a, b) => {
 		return new Date(b.created) - new Date(a.created);
 	});
+
+	if (!state.posts || state.posts.length === 0) {
+		return <div className="col-xl-6 main">
+		<div className="row card">
+			<div className="col-md-12 posts p-3">
+				<div className="card rounded">
+					<div className="card-header">
+						<div className="d-flex align-items-center">
+							<div className="ml-2">
+								<p>Comienza a publicar</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	}
 
     return <>
         <div className="col-xl-6 main">

@@ -6,27 +6,38 @@ const authtoken = require('../config/authtoken');
 
 // Obtener lista de eventos
 router.get('/list', [authtoken], async (req, resp) => {
-    const result = await DB
-		.select(['evento.userID',
-			'evento.ID',
-			'evento.title',
-			'evento.date',
-			'evento.GPS',
-			'evento.description',
-			'evento.created',
-			'users.nameSurname as nameSurname'])
-        .from('evento')
-        .leftJoin('users', 'evento.userID', 'users.ID')
-        .innerJoin('friends', function() {
-            this.on('evento.userID', '=', 'friends.sendFriend')
-                .orOn('evento.userID', '=', 'friends.acceptfriend')
-        })
-        .groupBy('evento.ID');
-		
-    resp.json({ status: true, data: result });
+    const myID = req.user.ID;
+
+    try {
+        const result = await DB
+            .select(['evento.userID',
+                'evento.ID',
+                'evento.title',
+                'evento.date',
+                'evento.GPS',
+                'evento.description',
+                'evento.created',
+                'users.nameSurname as nameSurname'])
+            .from('evento')
+            .leftJoin('users', 'evento.userID', 'users.ID')
+            .leftOuterJoin('friends', function() {
+                this.on('evento.userID', '=', 'friends.sendFriend')
+                    .orOn('evento.userID', '=', 'friends.acceptfriend')
+            })
+            .groupBy('evento.ID');
+
+        if (result.length > 0) {
+            resp.json({ status: true, data: result });
+        } else {
+            resp.json({ status: false, data: result });
+        }
+    } catch (error) {
+        console.error(error);
+        resp.status(500).json({ status: false, data: 'Error en el servidor' });
+    }
 });
 
-
+// Obtener creados por el usuario
 router.get('/self', [authtoken], async (req, resp) => {
     const result = await DB.select(['evento.title', 'evento.date', 'evento.GPS', 'evento.description', 'users.nameSurname as nameSurname'])
         .from('evento')

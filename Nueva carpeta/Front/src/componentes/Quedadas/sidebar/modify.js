@@ -16,6 +16,8 @@ const Modify = (props) => {
         });
     }, [])
 
+    console.log('modify', state)
+
     return <>
         <div className="col-xl-3">
             <div className="card rounded">
@@ -34,6 +36,7 @@ const Modify = (props) => {
                 <div className="card-body">
                     <div className="mt-3 ">
                         <h2 className="card-header">Quedadas a las que acudirás</h2>
+                        {(!state.events || state.events.length === 0) && <p>nada</p>}
                         {state.events.map(events => {
                             return <div key={events.ID} className="p-2">
                                 <div className="border-bottom">
