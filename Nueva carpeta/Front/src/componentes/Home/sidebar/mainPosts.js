@@ -31,18 +31,6 @@ const Main = () => {
 		setState({...state, content:e.target.value})
 	}
 
-	const [comment, setComment] = useState({
-		comment: false
-	})
-
-	const showComment = () =>{
-		setComment({...comment, comment: true})
-	}
-
-	const noComment = () =>{
-		setComment({...comment, comment: false})
-	}
-
 	const loadPosts = () => {
         API.get('/stories/list')
             .then((result) => {
@@ -132,9 +120,6 @@ const Main = () => {
 							<div className="card-footer">
 								{context.user.ID == post.userID &&<FooterSelf id={('/stories/'+post.ID)} erase={eraseEvent} modifys ={modify} dato={'post'}/>}
 								{context.user.ID !== post.userID &&<Footer />}
-								{comment.comment === false &&<button className='btn btn-primary' onClick={()=> showComment()}>Ver comentarios</button>}
-								{comment.comment &&<button className='btn btn-primary' onClick={()=> noComment()}>Ocultar</button>}
-								{comment.comment && <div className='p-2'><p>{post.commentName}</p><p>{post.comment}</p></div>}
 							</div>
 						</div>
 					</div>
@@ -142,7 +127,6 @@ const Main = () => {
 				}{message}
             </div>
         </div>
-        
     </>
 }
 

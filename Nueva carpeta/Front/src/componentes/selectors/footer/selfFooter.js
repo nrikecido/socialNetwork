@@ -11,7 +11,7 @@ const FooterSelf = ({id, erase, dato}) => {
 
     const eraseEvent = () =>{
         API.delete(id)
-        erase();
+        erase()
     }
 
     const modifyPost = () => {

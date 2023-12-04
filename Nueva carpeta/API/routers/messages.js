@@ -7,7 +7,9 @@ const authtoken = require('../config/authtoken');
 
 // Obtener lista de mensajes
 router.get('/list', [authtoken], async (req, resp) => {
-    const result = await DB.select([
+    
+    try{
+        const result = await DB.select([
             DB.raw("CASE WHEN sender.ID = :userId THEN receiver.nameSurname ELSE sender.nameSurname END AS OtherPartyName", { userId: req.user.ID }),
             DB.raw("CASE WHEN sender.ID = :userId THEN receiver.ID ELSE sender.ID END AS OtherPartyID", { userId: req.user.ID }),
             'messages.content',
@@ -26,10 +28,14 @@ router.get('/list', [authtoken], async (req, resp) => {
         .groupBy('OtherPartyName', 'OtherPartyID')
         .orderBy('messages.created', 'desc');
 
-    if (result.length > 0) {
-        resp.json({ status: true, result });
-    } else {
-        resp.json({ status: false, message: 'Ha habido algún error' });
+        if (result.length > 0) {
+            resp.json({ status: true, data: result });
+        } else {
+            resp.json({ status: false, data: result });
+        }
+    }catch (error) {
+        console.error(error);
+        return resp.status(500).json({ status: false, error: "Error interno del servidor." });
     }
 });
 
@@ -40,7 +46,8 @@ router.get('/:id', [authtoken], async (req, resp) => {
     const myID = req.user.ID;
     const friendID = req.params.id;
     
-    const result = await DB.select(['sender.nameSurname AS Sender', 'receiver.nameSurname AS Receiver', 'messages.content', 'messages.senderID','messages.receiverID', 'messages.created'])
+    try{
+        const result = await DB.select(['sender.nameSurname AS Sender', 'receiver.nameSurname AS Receiver', 'messages.content', 'messages.senderID','messages.receiverID', 'messages.created'])
         .from('messages')
         .join('users AS sender', 'sender.ID', '=', 'messages.senderID')
         .join('users AS receiver', 'receiver.ID', '=', 'messages.receiverID')
@@ -50,10 +57,14 @@ router.get('/:id', [authtoken], async (req, resp) => {
         });
 
         if(result.length > 0){
-            resp.json({ status: true, result});
+            resp.json({ status: true, data: result});
         } else {
-            resp.json({ status: false, message: 'Ha habido algún error' })
+            resp.json({ status: false, data: result})
         }
+    } catch (error) {
+        console.error(error);
+        return resp.status(500).json({ status: false, error: "Error interno del servidor." });
+    }
 });
 
 
@@ -102,10 +113,10 @@ router.put('/:id', [authtoken], async (req, resp) => {
     .andWhere('messageID', messageID);
 
 	if(result > 0){
-            resp.json({ status: true, message: 'Mensaje modificado correctamente'});
-        } else {
-            resp.json({ status: false, message: 'Ha habido algún error' })
-        }
+        resp.json({ status: true, message: 'Mensaje modificado correctamente'});
+    } else {
+        resp.json({ status: false, message: 'Ha habido algún error' })
+    }
 });
 
 
@@ -123,7 +134,7 @@ router.delete('/:id', [authtoken], async (req, resp) => {
     })
 
     if (result > 0) {
-        return resp.json({ status: true, message: 'Mensaje eliminado' });
+        return resp.json({ status: true, message: 'Conversación eliminada' });
     } else {
         return resp.json({ status: false, message: 'No se pudo eliminar el mensaje' });
     }

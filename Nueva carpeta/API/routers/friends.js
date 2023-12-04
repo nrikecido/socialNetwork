@@ -11,28 +11,37 @@ router.get('/list', [authtoken], async (req, resp) => {
 
   myID = req.user.ID;
 
-  const result = await DB.select([
+  try{
+    const result = await DB.select([
       DB.raw(`CASE 
-          WHEN friends.sendFriend = ? THEN u2.nameSurname
-          ELSE u1.nameSurname
-          END AS friendName`, [myID]),
+        WHEN friends.sendFriend = ? THEN u2.nameSurname
+        ELSE u1.nameSurname
+        END AS friendName`, [myID]),
       'friends.created',
       'u2.presentation',
       'users.ID'
-  ])
-  .from('friends')
-  .where('friends.accepted', 1)
-  .andWhere(builder => {
-    builder.where('friends.sendFriend', myID)
-    .orWhere('friends.acceptFriend', myID);
-  })
-  .innerJoin('users', function () {
-    this.on('users.ID', '=', DB.raw('CASE WHEN friends.sendFriend = ? THEN friends.acceptFriend ELSE friends.sendFriend END', [myID]));
-})
-  .innerJoin('users as u1', 'friends.sendFriend', 'u1.ID')
-  .innerJoin('users as u2', 'friends.acceptFriend', 'u2.ID');
+    ])
+    .from('friends')
+    .where('friends.accepted', 1)
+    .andWhere(builder => {
+      builder.where('friends.sendFriend', myID)
+      .orWhere('friends.acceptFriend', myID);
+    })
+    .innerJoin('users', function () {
+      this.on('users.ID', '=', DB.raw('CASE WHEN friends.sendFriend = ? THEN friends.acceptFriend ELSE friends.sendFriend END', [myID]));
+    })
+    .innerJoin('users as u1', 'friends.sendFriend', 'u1.ID')
+    .innerJoin('users as u2', 'friends.acceptFriend', 'u2.ID');
 
-  resp.json({ status: true, data: result });
+    if( result.length > 0 ){
+			return resp.json({status: true, data: result});
+		}else{
+			return resp.json({status: false, data: result});
+		}
+    } catch (error) {
+      console.error(error);
+      return resp.status(500).json({ status: false, error: "Error interno del servidor." });
+    }
 });
 
 
@@ -40,7 +49,8 @@ router.get('/:id', [authtoken], async (req, resp) => {
   const friendID = req.params.id;
   const myID = req.user.ID;
 
-  const result = await DB
+  try{
+    const result = await DB
     .select('users.nameSurname as friendName',
     'friends.created')
     .from('friends')
@@ -53,11 +63,15 @@ router.get('/:id', [authtoken], async (req, resp) => {
         this.on('users.ID', '=', DB.raw('CASE WHEN friends.sendFriend = ? THEN friends.acceptFriend ELSE friends.sendFriend END', [myID]));
     });
 
-    if (result.length === 1) {
-      resp.json({ status: true, data: result[0] });
+    if (result.length > 0) {
+      return resp.status(200).json({ status: true, data: result });
     } else {
-      resp.json({ status: false, error: 'Amigo no encontrado' });
+        return resp.status(404).json({ status: false, data: result });
     }
+  } catch (error) {
+    console.error(error);
+    return resp.status(500).json({ status: false, error: "Error interno del servidor." });
+}
 });
 
 

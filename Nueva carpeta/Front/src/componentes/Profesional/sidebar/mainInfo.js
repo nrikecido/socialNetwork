@@ -1,10 +1,12 @@
-import Sabina from '../img/ha-sabina.jpeg';
-import Footer from '../../selectors/footer/otherFooter';
+import Footer from '../../selectors/footer/selfFooter';
+import OtherFooter from '../../selectors/footer/otherFooter'
 import API from '../../../config/api';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import {ContextGlobal} from '../../../config/contextGlobal';
 
 const MainInfo = () => {
+
+    const [context, setContext] = useContext(ContextGlobal);
 
     const [state, setState] = useState({
 		status: 'loading',
@@ -21,36 +23,29 @@ const MainInfo = () => {
     <div className="col-xl-6">
         <div className="row">
             {state.status === 'loaded' && state.professional && (
-                <div className="col-md-12">
+            <div className="col-md-12">
                 <h1 className="text-center bg-white rounded">{state.professional.proTitle}</h1>
                 <div className="card rounded">
                     <div className="card-header">
                         <div className="d-flex align-items-center">
                             <div className="ml-2">
-                                <h3>Instalaciones</h3>
+                                <h3>Datos</h3>
                             </div>
                         </div>
                     </div>
                     <div className="card-body">
-                        <div>
-                            <h5>Fotos de las instalaciones</h5>
-                            <img className="img-xs post-image p-2" src={Sabina} alt="profile"/>
-                            <img className="img-xs post-image p-2" src={Sabina} alt="profile"/>
-                        </div>
-                        <div>
-                            <h5>Descripción de las instalaciones:</h5>
-                            <p>Nuestras instalaciones cuentan con....</p>
-                        </div>
+                        <p>Aquí una información</p>
                     </div>
                     <div className="card-footer">
-                        <Footer></Footer>
+                        {context.user.ID === state.professional.ID &&<Footer></Footer>}
+                        {context.user.ID !== state.professional.ID && <OtherFooter></OtherFooter>}
                     </div>
                 </div>
                 <div className="card rounded mt-3">
                     <div className="card-header">
                         <div className="d-flex align-items-center">
                             <div className="ml-2">
-                                <h3>Horarios y precios</h3>
+                                <h3>Clases</h3>
                             </div>
                         </div>
                     </div>
@@ -61,7 +56,8 @@ const MainInfo = () => {
                         </div>
                     </div>
                     <div className="card-footer">
-                        <Footer></Footer>
+                        {context.user.ID === state.professional.ID &&<Footer></Footer>}
+                        {context.user.ID !== state.professional.ID && <OtherFooter></OtherFooter>}
                     </div>
                 </div>
             </div>

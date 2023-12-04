@@ -19,7 +19,7 @@ router.get('/list', [authtoken], async (req, resp) => {
 			'users.nameSurname as nameSurname'])
 		.from('evento')
 		.join('users', 'evento.userID', 'users.ID')
-		.leftJoin('eventgo', function() {
+		.innerJoin('eventgo', function() {
 			this.on('evento.ID', '=', 'eventgo.eventID')
 				.andOn('eventgo.userID', '=', myID)
 		})
@@ -28,9 +28,8 @@ router.get('/list', [authtoken], async (req, resp) => {
 		if (result.length > 0){
 			resp.json({status: true, data: result})
 		} else {
-			resp.json({status: false, data: 'Hubo un error'})
+			resp.json({status: false, data: result})
 		}
-
 	} catch (error) {
         console.error(error);
         resp.status(500).json({ status: false, data: 'Error en el servidor' });

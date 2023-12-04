@@ -16,8 +16,9 @@ const Punctuation = () => {
 		API.get('/votes/list').then(result => {
 			setState({...state, status:"loaded", votes: result.data});
 		})
-
 	}, []);
+
+    console.log(state)
 
     return <>
         <div className="col-xl-6">
@@ -34,10 +35,8 @@ const Punctuation = () => {
                     </div>
                 </div>
             </div>
-
             }
             )}
-            
         </div>
     </>
 }

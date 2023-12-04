@@ -15,6 +15,8 @@ app.use( cors() );
 	app.use('/events', require('./routers/events'));
 	app.use('/eventgo', require('./routers/eventgo'));
 	app.use('/comments', require('./routers/comments'));
+	app.use('/class', require('./routers/class'));
+	app.use('/liked', require('./routers/liked'))
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

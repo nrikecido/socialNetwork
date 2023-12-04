@@ -34,7 +34,7 @@ const Profile = (props) => {
                         <p>CONTACTO:</p>
                         <p className="text-muted">{context.user.procontact}</p>
                     </div>
-                    <button className='btn btn-primary m-2 form-control' onClick={() => {props.updateMain('edit')}}>Editar perfil</button><br/>
+                    {props.props &&<button className='btn btn-primary m-2 form-control' onClick={() => {props.updateMain('edit')}}>Editar perfil</button>}<br/>
                     {props.props === false &&<button className='btn btn-primary m-2 form-control' onClick={() => {props.updateMain('main')}}>Atrás</button>}
                 </div>
             </div>

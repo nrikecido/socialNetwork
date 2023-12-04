@@ -20,19 +20,11 @@ const SideInfo = (props) => {
             .then(result => {
                 setFriendsState({ status: 'loaded', friends: result.data });
             })
-            .catch(error => {
-                console.error('Error fetching friends:', error);
-                setFriendsState({ status: 'error', friends: [] });
-            });
 
         API.get('/votes/list')
             .then(result => {
                 setVotesState({ status: 'loaded', votes: result.data });
             })
-            .catch(error => {
-                console.error('Error fetching votes:', error);
-                setVotesState({ status: 'error', votes: [] });
-            });
     }, []);
 
     return (
@@ -64,7 +56,7 @@ const SideInfo = (props) => {
                             )}
                             {friendsState.status === 'error' && <p>Error al cargar amigos.</p>}
                         </div>
-                        <button className='btn btn-primary' onClick={() => { props.updateMain('friendList') }}>Ver todos</button>
+                        {props.button &&<button className='btn btn-primary' onClick={() => { props.updateMain('friendList') }}>Ver todos</button>}
                         {props.button === false && <button className='btn btn-primary' onClick={() => { props.updateMain('main') }}>Atrás</button>}
                     </div>
 
@@ -85,7 +77,7 @@ const SideInfo = (props) => {
                             </>
                         )}
                         {votesState.status === 'error' && <p>Error al cargar puntuaciones.</p>}
-                        <button className='btn btn-primary' onClick={() => { props.updateMain('punctuation') }}>Ver puntuaciones</button>
+                        {props.button &&<button className='btn btn-primary' onClick={() => { props.updateMain('punctuation') }}>Ver puntuaciones</button>}
                         {props.button === false && <button className='btn btn-primary' onClick={() => { props.updateMain('main') }}>Atrás</button>}
                     </div>
 

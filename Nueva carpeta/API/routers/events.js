@@ -27,9 +27,9 @@ router.get('/list', [authtoken], async (req, resp) => {
             .groupBy('evento.ID');
 
         if (result.length > 0) {
-            resp.json({ status: true, data: result });
+            resp.status(200).json({ status: true, data: result });
         } else {
-            resp.json({ status: false, data: result });
+            resp.status(404).json({ status: false, data: result });
         }
     } catch (error) {
         console.error(error);
@@ -39,23 +39,44 @@ router.get('/list', [authtoken], async (req, resp) => {
 
 // Obtener creados por el usuario
 router.get('/self', [authtoken], async (req, resp) => {
-    const result = await DB.select(['evento.title', 'evento.date', 'evento.GPS', 'evento.description', 'users.nameSurname as nameSurname'])
+    const myID = req.user.ID
+
+    try{
+        const result = await DB.select(['evento.title', 'evento.date', 'evento.GPS', 'evento.description', 'users.nameSurname as nameSurname'])
         .from('evento')
-		.where('userID', req.user.ID)
+		.where('userID', myID)
         .leftJoin('users', 'evento.userID', 'users.ID');
-    resp.json({ status: true, data: result });
+        if (result.length > 0) {
+            resp.status(200).json({ status: true, data: result });
+        } else {
+            resp.status(404).json({ status: false, data: result });
+        }
+    } catch (error) {
+        console.error(error);
+        resp.status(500).json({ status: false, data: 'Error en el servidor' });
+    
+    }
 });
 
 
 // Obtener un evento en concreto
 router.get('/:id', async (req, resp) => {
 
-	const result = await DB.select(['userID', 'title', 'description', 'date', 'duration', 'needed', 'created', 'capacity', 'GPS'])
-	.from('evento')
-	.where('id', req.params.id);
+	try{
+        const result = await DB.select(['userID', 'title', 'description', 'date', 'duration', 'needed', 'created', 'capacity', 'GPS'])
+        .from('evento')
+        .where('id', req.params.id);
 
-	resp.json({status: true, data: result});
-
+        if(result > 0){
+            resp.status(200).json({status: true, data: result})
+        } else {
+            resp.status(404).json({ status: false, data: result });
+        }
+    } catch (error) {
+        console.error(error);
+        resp.status(500).json({ status: false, data: 'Error en el servidor' });
+    
+    }
 });
 
 
@@ -74,12 +95,13 @@ router.post('/', [authtoken], async (req, resp) => {
             GPS: req.body.GPS,
             valoration: 0 // ¿valor por defecto?
         });
+    
+        return resp.json({status: true});
 		
 	} catch (error) {
 		console.error(error)
 		return resp.json({status: false, error: "Algo falló"});
 	}
-	return resp.json({status: true});
 });
 
 
@@ -99,7 +121,7 @@ router.put('/:id', [authtoken],async (req, resp) => {
 	})
 
 	const result = await DB('evento')
-  .update({
+    .update({
     'evento.title': toEdit.title,
     'evento.description': toEdit.description,
     'evento.date': toEdit.date,
@@ -113,11 +135,11 @@ router.put('/:id', [authtoken],async (req, resp) => {
   .where('evento.ID', ID)
   .andWhere('users.ID', myID);
 
-if (result === 1) {
-  resp.json({ status: true, data: 'Publicación modificada' });
-} else {
-  resp.json({ status: false, message: 'No tienes permisos o no existe la publicación' });
-}
+    if (result > 0) {
+    resp.json({ status: true, data: result });
+    } else {
+    resp.json({ status: false, message: 'No tienes permisos o no existe la publicación' });
+    }
 
 });
 
@@ -134,10 +156,10 @@ router.delete('/:id', [authtoken], async (req, resp) => {
 	.where('evento.ID', ID)
 	.andWhere('users.ID', myID)
 
-	if(result === 1){
-		resp.json({status:true, data: 'Publicación eliminada'});
+	if(result > 0){
+		resp.json({status:true, data: result});
 	} else {
-		resp.json({status: false, message: 'No tienes permisos o no existe la publicación'})
+		resp.json({status: false, data: result})
 	}
 });
 

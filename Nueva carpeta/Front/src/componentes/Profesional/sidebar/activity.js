@@ -38,8 +38,8 @@ const Activity = (props) => {
                                     </div>
                                 ))}
                             </div>
-                            <button className="btn btn-primary m-2 form-control" onClick={() => {props.updateMain('events')}}>Ver todo</button><br />
-                            <button className="btn btn-primary m-2 form-control" onClick={() => {props.updateMain('main')}}>Atrás</button><br />
+                            {props.button &&<button className="btn btn-primary m-2 form-control" onClick={() => {props.updateMain('events')}}>Ver todo</button>}<br />
+                            {props.button === false &&<button className="btn btn-primary m-2 form-control" onClick={() => {props.updateMain('main')}}>Atrás</button>}<br />
                         </div>
                     </div>
                 </div>

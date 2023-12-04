@@ -10,7 +10,7 @@ const MainConversation = (props) => {
 
     useEffect(() => {
         API.get('/messages/'+props.state).then(result => {
-            setState({ ...state, status: "loaded", messages: result.result });
+            setState({ ...state, status: "loaded", messages: result.data });
         });
     }, [props.state]);
 
@@ -24,7 +24,7 @@ const MainConversation = (props) => {
 
     const reloadMessages = () => {
         API.get('/messages/'+props.state).then(result => {
-            setState({ ...state, status: "loaded", messages: result.result });
+            setState({ ...state, status: "loaded", messages: result.data });
         });
     };
 
@@ -41,7 +41,9 @@ const MainConversation = (props) => {
         })
     }
 
-    if (state.messages === undefined){
+    console.log(state)
+
+    if (state.status === 'loaded' && state.messages.length === 0){
         return (
             <div className="col-xl-6">
                 <div className="row">

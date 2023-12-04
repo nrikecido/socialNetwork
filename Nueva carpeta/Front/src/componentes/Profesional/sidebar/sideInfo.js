@@ -20,6 +20,8 @@ const SideInfo = (props) => {
 
 	}, []);
 
+    console.log(state)
+
     return <>
         <div className="col-xl-3">
             <div className="card rounded">
@@ -46,8 +48,8 @@ const SideInfo = (props) => {
                             <li>Twitter</li>
                         </ul>
                     </div>
-                    <button className="btn btn-primary m-2 form-control" onClick={() => {props.updateMain('modifymain')}}>Editar</button><br />
-                    <button className="btn btn-primary m-2 form-control" onClick={() => {props.updateMain('main')}}>Atrás</button>
+                    {props.button &&<button className="btn btn-primary m-2 form-control" onClick={() => {props.updateMain('modifymain')}}>Editar</button>}<br />
+                    {props.button === false &&<button className="btn btn-primary m-2 form-control" onClick={() => {props.updateMain('main')}}>Atrás</button>}
                 </div>
             )}
             </div>

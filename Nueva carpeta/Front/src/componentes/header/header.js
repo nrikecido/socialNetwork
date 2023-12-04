@@ -9,10 +9,17 @@ const Header = () => {
     const [isHidden, setIsHidden] = useState(true);
 
     const mostrar = () => {
-        setIsHidden(!isHidden);
+        setIsHidden(!isHidden)
+        setTimeout(()=>{
+            setIsHidden(true)
+        }, 4000)
     };
 
-    const redirect = useNavigate()
+    const redirect = useNavigate();
+  
+    const handleClick = () => {
+        redirect('/app/home')
+    };
 
     const logout = () =>{
         API.remove_token('token')
@@ -21,7 +28,7 @@ const Header = () => {
 
     return <>
         <div className="logo rounded container">
-            <h1 className="gray-shade text-white text-center p-5">musIN</h1>
+            <h1 className="gray-shade text-white text-center p-5" onClick={handleClick} style={{ cursor: 'pointer'}}>musIN</h1>
         </div>
         <div className="container links">
             <div className="m-3 text-center">

@@ -25,6 +25,16 @@ const Main = () => {
 		})
 	}, []);
 
+	const [message, setMessage] = useState(null);
+    
+    const eraseEvent =() => {
+        setMessage(<p className='bg-danger rounded p-3'>Publicación eliminada</p>)
+        setTimeout(() =>{
+            setMessage(null)
+            window.location.reload()
+        }, 3000)
+    }
+
 	const ordenaPosts = [...state.posts].sort((a, b) => {
 		return new Date(b.created) - new Date(a.created);
 	});
@@ -67,13 +77,13 @@ const Main = () => {
 								<p className="mb-3 tx-14">{post.content}</p>
 							</div>
 							<div className="card-footer">
-								{context.user.ID === post.userID &&<FooterSelf id={'/stories/'+post.ID} />}
-								{context.user.ID !== post.userID &&<Footer />}
+								{context.user.ID === post.userID &&<FooterSelf erase={eraseEvent} id={'/stories/'+post.ID} />}
+								{context.user.ID !== post.userID &&<Footer /> }
 							</div>
 						</div>
 					</div>
 					})
-				}
+				}{message}
             </div>
         </div>
         

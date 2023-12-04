@@ -8,24 +8,25 @@ import { useState } from "react";
 const Content = () => {
 
     const [state, setState] = useState({
-        module: <MainInfo />
+        module: <MainInfo />,
+        button: true
     })
 
     const updateMain = (module) => {
-        if (module === 'main') {setState({...state, module: <MainInfo />})}
+        if (module === 'main') {setState({...state, module: <MainInfo />, button: true})}
 
-        if (module === 'events') {setState({...state, module: <Events />})}
+        if (module === 'events') {setState({...state, module: <Events />, button: false})}
 
-        if (module === 'sideinfo') {setState({...state, module: <SideInfo />})}
+        if (module === 'sideinfo') {setState({...state, module: <SideInfo />, button: false})}
 
-        if (module === 'modifymain') {setState({...state, module: <ModifyMain />})}
+        if (module === 'modifymain') {setState({...state, module: <ModifyMain />, button: false})}
     }
 
     return <> 
         <div className="row">
-            <SideInfo updateMain={updateMain}></SideInfo>
+            <SideInfo updateMain={updateMain} button={state.button}></SideInfo>
             {state.module}
-            <Activity updateMain={updateMain}></Activity>  
+            <Activity updateMain={updateMain} button= {state.button}></Activity>  
         </div>
     </>
 };

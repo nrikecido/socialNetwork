@@ -38,7 +38,7 @@ const SideFriends = (props) => {
                             </div>
                             })}
                         </div>
-                        <button className='btn btn-primary m-2' onClick={() => {props.updateMain('friends')}}>Ver todos</button>
+                        {props.props && <button className='btn btn-primary m-2' onClick={() => {props.updateMain('friends')}}>Ver todos</button>}
                         {props.props === false &&<button className='btn btn-primary m-2' onClick={() => {props.updateMain('main')}}>Atrás</button>}
                     </div>
                 </div>

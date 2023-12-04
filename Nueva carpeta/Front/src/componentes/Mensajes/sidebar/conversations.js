@@ -10,20 +10,20 @@ const Conversations = (props) => {
 	});
 
 	useEffect(() => {
-    API.get('/messages/list').then(result => {
-        setState({ ...state, status: "loaded", messages: result.result });
-        });
+        API.get('/messages/list').then(result => {
+            setState({ ...state, status: "loaded", messages: result.data });
+            });
     }, []);
-    
-    if(state.messages === undefined){
-        return <div className="col-xl-3">
-                <div className="card rounded">
-                    <div className="card-body">
-                        <p>LISTA CONVERSACIONES</p>
-                        <p>Selecciona a un contacto de tu lista de amigos para empezar a enviar mensajes</p>
-                    </div>
-                </div>
-            </div>
+
+    const [message, setMessage] = useState(null)
+
+    const deleteConver = (ID) => {
+        API.delete('/messages/'+ID)
+        setMessage(<p className='bg-danger'>Eliminando conversación...</p>)
+        setTimeout(()=>{
+            setMessage(null)
+            window.location.reload()
+        }, 3000)
     }
 
     return <>
@@ -38,11 +38,12 @@ const Conversations = (props) => {
                               {messages.OtherPartyName} dice: {messages.content}
                               <span className="tx-11 text-muted"> hace {created(messages.created)}</span>
                               <button className='btn' onClick={()=> props.pickConver(messages.OtherPartyID)}> Enviar mensaje</button>
+                              <button className='btn' onClick={()=> deleteConver(messages.OtherPartyID)}>Eliminar conversación</button>
                             </p>
                           );
                           
                     })
-                }
+                }{message}
             </div>
         </div>
     </div>

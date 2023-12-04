@@ -10,13 +10,18 @@ const hash = require('../config/password');
 // Rutas de la API de usuarios
 router.get('/list', [authtoken], async (req, resp) => {
 
-	const result = await DB.select(['nameSurname', 'description'])
-	.from('users')
-	
-	if( result.length > 0 ){
-		return resp.json({status: true, data: result});
-	}else{
-		return resp.json({status: false, error: "Ups, algo falló"});
+	try{
+		const result = await DB.select(['nameSurname', 'description'])
+		.from('users')
+		
+		if (result.length > 0) {
+            return resp.status(200).json({ status: true, data: result });
+        } else {
+            return resp.status(404).json({ status: false, data: result });
+        }
+	}catch (error){
+		console.error(error);
+        return resp.status(500).json({ status: false, error: "Error interno del servidor." });
 	}
 });
 
@@ -24,36 +29,42 @@ router.get('/list', [authtoken], async (req, resp) => {
 // Obtener el propio perfil
 router.get('/self', [authtoken], async (req, resp) => {
 
-	const result = await DB
-	.select(['ID', 
-		'email', 
-		'presentation', 
-		'description', 
-		'nameSurname',
-		'birthDate', 
-		'city', 
-		'proTitle', 
-		'proDescription',
-		'proInfo', 
-		'proContact', 
-		'proSchedule', 
-		'proPrices', 
-		'proOther'])
-	.from('users')
-	.where('ID', req.user.ID);
+	try{
+		const result = await DB
+		.select(['ID', 
+			'email', 
+			'presentation', 
+			'description', 
+			'nameSurname',
+			'birthDate', 
+			'city', 
+			'proTitle', 
+			'proDescription',
+			'proInfo', 
+			'proContact', 
+			'proSchedule', 
+			'proPrices', 
+			'proOther'])
+		.from('users')
+		.where('ID', req.user.ID);
 
-	if( result.length === 1 ){
-		return resp.json({status: true, data: result[0]});
-	}else{
-		return resp.json({status: false, error: "Ups, algo falló"});
-	}
+		if (result.length > 0) {
+            return resp.status(200).json({ status: true, data: result[0] });
+        } else {
+            return resp.status(404).json({ status: false, data: result });
+        }
+    } catch (error) {
+        console.error(error);
+        return resp.status(500).json({ status: false, error: "Error interno del servidor." });
+    }
 });
 
 
 // Obtener perfil concreto (no amigo)
 router.get('/:id', [authtoken], async (req, resp) => {
 
-	const result = await DB
+	try{
+		const result = await DB
 		.select(['email', 
 			'presentation', 
 			'description', 
@@ -70,11 +81,15 @@ router.get('/:id', [authtoken], async (req, resp) => {
 		.from('users')
 		.where('ID', req.params.id);
 
-	if( result.length === 1 ){
-		return resp.json({status: true, data: result[0]});
-	}else{
-		return resp.json({status: false, error: "ID no válido"});
-	}
+		if (result.length > 0) {
+            return resp.status(200).json({ status: true, data: result[0] });
+        } else {
+            return resp.status(404).json({ status: false, data: result });
+        }
+	} catch (error) {
+        console.error(error);
+        return resp.status(500).json({ status: false, error: "Error interno del servidor." });
+    }
 });
 
 

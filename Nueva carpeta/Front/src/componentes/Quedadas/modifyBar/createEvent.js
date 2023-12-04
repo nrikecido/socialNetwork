@@ -33,18 +33,17 @@ const CreateEvent = (props) => {
       duration: state.duration,
       needed: state.needed,
       capacity: state.capacity,
-      GPS: state.GPS,
-      valoration: state.valoration,
+      GPS: state.GPS
     };
 
-    API.post('/events/', eventData)
+    if(Object.values(eventData).some(value => value === undefined || value === '')){
+      setMessage(<p className='bg-danger p-2 rounded'>No hay nada que publicar</p>);
+    } else {
+      API.post('/events/', eventData)
       .then(() => {
         mensaje()
       })
-      .catch((error) => {
-        console.error('Error al publicar el evento:', error);
-      }
-    );
+    }
   };
 
   return (
@@ -77,69 +76,58 @@ const CreateEvent = (props) => {
               />
             </p>
             <p>Fecha: 
-                <input  
-                    type="date"
-                    className="form-control rounded-input"
-                    id="date"
-                    placeholder="Escribe el título"
-                    value={state.date}
-                    onChange={(e) => setState({ ...state, date: e.target.value })} 
-                />
+              <input  
+                type="date"
+                className="form-control rounded-input"
+                id="date"
+                placeholder="Escribe el título"
+                value={state.date}
+                onChange={(e) => setState({ ...state, date: e.target.value })} 
+              />
             </p>
             <p>Duración: 
-                <input  
-                    type="text"
-                    className="form-control rounded-input"
-                    id="duration"
-                    placeholder="Duración"
-                    value={state.duration}
-                    onChange={(e) => setState({ ...state, duration: e.target.value })} 
-                />
+              <input  
+                type="text"
+                className="form-control rounded-input"
+                id="duration"
+                placeholder="Duración"
+                value={state.duration}
+                onChange={(e) => setState({ ...state, duration: e.target.value })} 
+              />
             </p>
             <p>Necesario: 
-                <input  
-                    type="text"
-                    className="form-control rounded-input"
-                    id="needed"
-                    placeholder="Necesario"
-                    value={state.needed}
-                    onChange={(e) => setState({ ...state, needed: e.target.value })} 
-                />
+              <input  
+                type="text"
+                className="form-control rounded-input"
+                id="needed"
+                placeholder="Necesario"
+                value={state.needed}
+                onChange={(e) => setState({ ...state, needed: e.target.value })} 
+              />
             </p>
             <p>Capacidad: 
-                <input  
-                    type="text"
-                    className="form-control rounded-input"
-                    id="capacity"
-                    placeholder="Capacidad"
-                    value={state.capacity}
-                    onChange={(e) => setState({ ...state, capacity: e.target.value })} 
-                />
+              <input  
+                type="text"
+                className="form-control rounded-input"
+                id="capacity"
+                placeholder="Capacidad"
+                value={state.capacity}
+                onChange={(e) => setState({ ...state, capacity: e.target.value })} 
+              />
             </p>
             <p>GPS: 
-                <input  
-                    type="text"
-                    className="form-control rounded-input"
-                    id="GPS"
-                    placeholder="Lugar"
-                    value={state.GPS}
-                    onChange={(e) => setState({ ...state, GPS: e.target.value })} 
-                />
-            </p>
-            <p>Valoración: 
-                <input  
-                    type="text"
-                    className="form-control rounded-input"
-                    id="valoration"
-                    placeholder="Valoración"
-                    value={state.valoration}
-                    onChange={(e) => setState({ ...state, valoration: e.target.value })} 
-                />
+              <input  
+                type="text"
+                className="form-control rounded-input"
+                id="GPS"
+                placeholder="Lugar"
+                value={state.GPS}
+                onChange={(e) => setState({ ...state, GPS: e.target.value })} 
+              />
             </p>
             <button className="btn btn-primary" onClick={publishEvent}>
               Publicar
-            </button>
-            <button onClick={()=> mensaje()}>ldldld</button>{message}
+            </button>{message}
           </div>
         </div>
       </div>

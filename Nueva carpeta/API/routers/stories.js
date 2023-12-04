@@ -5,48 +5,32 @@ const DB = require('../config/db');
 const authtoken = require('../config/authtoken');
 
 
+// Lista de stories y sus comentarios
 router.get('/list', [authtoken], async (req, resp) => {
-    try {
-        const myID = req.user.ID;
 
+	const myID = req.user.ID;
+    try {
         const result = await DB
             .select([
                 'userstories.ID',
                 'userstories.userID',
                 'userstories.content',
                 'userstories.created',
-                'users.nameSurname as nameSurname',
-                'storycomments.ID as comentID',
-                'storycomments.content as comment',
-                'storycomments.userID as commentUserID', 
-                'usersComment.nameSurname as commentName'
+                'users.nameSurname as nameSurname'
             ])
             .from('userstories')
-            .leftJoin('users', function () {
-                this.on('users.ID', '=', 'userstories.userID');
-            })
-            .join('friends', function () {
-                this.on('userstories.userID', '=', 'friends.sendFriend')
-                    .orOn('userstories.userID', '=', 'friends.acceptFriend');
-            })
-            .leftJoin('storycomments', function () {
-                this.on('storycomments.userID', '=', 'users.ID');
-            })
-            .leftJoin('users as usersComment', 'usersComment.ID', '=', 'storycomments.userID') // Alias para el usuario que dejó el comentario
-            .where('friends.accepted', true)
-            .andWhere(function () {
-                this.where('friends.acceptFriend', myID)
-                    .orWhere('friends.sendFriend', myID);
-            })
-            .groupBy('userstories.ID');
-
-        resp.json({ status: true, data: result });
+            .leftJoin('users', 'users.ID', '=', 'userstories.userID')
+        
+        if (result.length > 0){
+			resp.status(200).json({ status: true, data: result });
+		}else{
+			resp.status(404).json({status: false, data: result})
+		}
     } catch (error) {
         console.error(error);
         resp.status(500).json({ status: false, message: 'Error en el servidor.' });
     }
 });
-
 
 
 // Ver historias de un amigo en concreto (hay que repasar este)
@@ -55,7 +39,8 @@ router.get('/friends/:id', [authtoken], async (req, resp) => {
 	const myID = req.user.ID;
 	const friendID = req.params.id;
 
-    const result = await DB
+    try{
+		const result = await DB
 		.select(['userstories.ID as storyID',
 			'userstories.userID', 
 			'userstories.content', 
@@ -72,18 +57,23 @@ router.get('/friends/:id', [authtoken], async (req, resp) => {
 		.andWhere('friends.accepted', 1)
 		.andWhereNot('userstories.userID', myID)
 		
-	if(result.length > 0) {
-		resp.json({status: true, data: result});
-	} else {
-		resp.json({status: false, message: 'No puedes ver la historia'})
+		if(result.length > 0) {
+			resp.status(200).json({status: true, data: result});
+		} else {
+			resp.status(404).json({status: false, data: result})
+		}
+	} catch (error){
+		console.error(error);
+        return resp.status(500).json({ status: false, error: "Error interno del servidor." });
 	}
 });
 
 
 // Ver historia concreta
 router.get('/:id', [authtoken], async (req, resp) =>  {
-
-    const result = await DB
+	const storyID = req.params.id;
+    try{
+		const result = await DB
 		.select(['userstories.content',
 			'userstories.created'])
 			.from('userstories')
@@ -91,14 +81,18 @@ router.get('/:id', [authtoken], async (req, resp) =>  {
 			this.on('userstories.userID', '=', 'friends.acceptFriend')
 			this.orOn('userstories.userID', '=', 'friends.sendFriend')
 		})
-		.where('userstories.ID', req.params.id)
+		.where('userstories.ID', storyID)
 		.andWhere('friends.accepted', 1);
 	
-	if(result.length > 0) {
-		resp.json({status: true, data: result});
-	} else {
-		resp.json({status: false, message: 'No puedes ver la historia'})
-	}
+		if(result.length > 0) {
+			resp.json({status: true, data: result});
+		} else {
+			resp.json({status: false,  data: result})
+		}
+	} catch (error) {
+        console.error(error);
+        return resp.status(500).json({ status: false, error: "Error interno del servidor." });
+    }
 });
 
 
